@@ -4,12 +4,10 @@ import * as THREE from "https://unpkg.com/three@0.127.0/build/three.module.js";
 import { OrbitControls } from "https://unpkg.com/three@0.127.0/examples/jsm/controls/OrbitControls.js";
 const scene = new THREE.Scene();
 
-// Setup
-
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
 const renderer = new THREE.WebGLRenderer({
-  canvas: document.querySelector('#bg'),
+  canvas: document.querySelector("#bg"),
 });
 
 renderer.setPixelRatio(window.devicePixelRatio);
@@ -19,85 +17,80 @@ camera.position.setX(-3);
 
 renderer.render(scene, camera);
 
+// Lights
+const pointLight = new THREE.PointLight(0xffffff);
+pointLight.position.set(5, 5, 5);
 
-
-//lighting
-const pointLight = new THREE.PointLight(0xFFFFFF);
-pointLight.position.set(5,5,5);
-
-const ambientLight = new THREE.AmbientLight(0xFFEEFF);
-
-//const lightHelper = new THREE.PointLightHelper(pointLight);
-//const gridHelper = new THREE.GridHelper();
-//scene.add(lightHelper,gridHelper);
-
+const ambientLight = new THREE.AmbientLight(0xffffff);
 scene.add(pointLight, ambientLight);
 
-const controls = new OrbitControls(camera, renderer.domElement);
+// const lightHelper = new THREE.PointLightHelper(pointLight)
+// const gridHelper = new THREE.GridHelper( 200, 50 )
+// scene.add(lightHelper, gridHelper)
 
-//add stars
+// const controls = new OrbitControls(camera, renderer.domElement); // Listen to dom events on the mouse and update the camera pos accordingly
 
-function addStar(){
+function addStar() {
   const geometry = new THREE.SphereGeometry(0.25, 24, 24);
-  const material = new THREE.MeshStandardMaterial({color:0xFFFFFF})
+  const material = new THREE.MeshStandardMaterial({ color: 0xffffff });
   const star = new THREE.Mesh(geometry, material);
 
-  const[x,y,z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(100));
-  star.position.set(x,y,z);
+  const [x, y, z] = Array(3)
+    .fill()
+    .map(() => THREE.MathUtils.randFloatSpread(100));
+
+  star.position.set(x, y, z);
   scene.add(star);
 }
+// Arra of 250 values and then for each value calls the addStar function
+Array(250).fill().forEach(addStar);
 
-Array(200).fill().forEach(addStar);
-
-//add background
-const spaceTexture = new THREE.TextureLoader().load('./dist/light-bg.jpg');
+// changes bg
+const spaceTexture = new THREE.TextureLoader().load("./dist/light-bg.jpg");
 scene.background = spaceTexture;
 
 
-
-//add moon
-
-const moonTexture = new THREE.TextureLoader().load('./dist/moon.jpg');
-const normalTexture = new THREE.TextureLoader().load('./dist/normal.jpg');
-
+//MOOON
+const moonTexture = new THREE.TextureLoader().load("./dist/moon.jpg");
+const imageTexture = new THREE.TextureLoader().load("./dist/normal.jpg");
 const moon = new THREE.Mesh(
   new THREE.SphereGeometry(3, 32, 32),
-  new THREE.MeshStandardMaterial({
-    map: moonTexture,
-    normalMap: normalTexture,
-  })
+  new THREE.MeshStandardMaterial({ map: moonTexture, normalMap: imageTexture })
 );
-
 scene.add(moon);
-
+// Repostionisng moon to further down of z axis as that is the direction of scroll
 moon.position.z = 30;
 moon.position.setX(-10);
 
-// Scroll Animation
+ani.position.z = -5;
+ani.position.x = 2;
+
+// scroll Animation
 
 function moveCamera() {
+  // top prop here shows how far we are from the top of the webpage
   const t = document.body.getBoundingClientRect().top;
   moon.rotation.x += 0.05;
   moon.rotation.y += 0.075;
   moon.rotation.z += 0.05;
 
-
-  camera.position.z = t * -0.01;
-  camera.position.x = t * -0.0002;
+  camera.rotation.z = t * -0.01;
+  camera.rotation.x = t * -0.0002;
   camera.rotation.y = t * -0.0002;
 }
-
+// fire the func when scrolled
 document.body.onscroll = moveCamera;
-moveCamera();
+moveCamera(); // thr func is assigned as the event handler for the document body on scroll event
 
-// Animation Loop
+// Animation
 
+// renderer.render( scene, camera );
+// Alternate below
 function animate() {
   requestAnimationFrame(animate);
 
   moon.rotation.x += 0.005;
-
-  // controls.update();
+  //controls.update();
 
   renderer.render(scene, camera);
 }
@@ -110,12 +103,12 @@ var element = document.body;
 checkbox.addEventListener('change', function() {
   if (this.checked) {
     console.log("Checkbox is checked..");
-    const spaceTexture = new THREE.TextureLoader().load('./dist/dark-bg.jpg');
+    const spaceTexture = new THREE.TextureLoader().load('./dark-bg.jpg');
     scene.background = spaceTexture;
     element.classList.toggle("dark-mode");
   } else {
     console.log("Checkbox is not checked..");
-    const spaceTexture = new THREE.TextureLoader().load('./dist/light-bg.jpg');
+    const spaceTexture = new THREE.TextureLoader().load('./light-bg.jpg');
     scene.background = spaceTexture;
     element.classList.toggle("dark-mode");
   }
