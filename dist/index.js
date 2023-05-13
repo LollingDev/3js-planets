@@ -52,7 +52,7 @@ function addStar() {
 Array(250).fill().forEach(addStar);
 
 // changes bg
-const spaceTexture = new THREE.TextureLoader().load("./dist/space.jpg");
+const spaceTexture = new THREE.TextureLoader().load("./dist/light-bg.jpg");
 scene.background = spaceTexture;
 
 //MOOON
@@ -100,3 +100,21 @@ function animate() {
 }
 
 animate();
+
+
+var checkbox = document.querySelector("input[name=checkbox]");
+var element = document.body;
+
+checkbox.addEventListener('change', function() {
+  if (this.checked) {
+    console.log("Checkbox is checked..");
+    const spaceTexture = new THREE.TextureLoader().load('./dark-bg.jpg');
+    scene.background = spaceTexture;
+    element.classList.toggle("dark-mode");
+  } else {
+    console.log("Checkbox is not checked..");
+    const spaceTexture = new THREE.TextureLoader().load('./light-bg.jpg');
+    scene.background = spaceTexture;
+    element.classList.toggle("dark-mode");
+  }
+});
