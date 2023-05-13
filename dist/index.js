@@ -4,7 +4,12 @@ import * as THREE from "https://unpkg.com/three@0.127.0/build/three.module.js";
 import { OrbitControls } from "https://unpkg.com/three@0.127.0/examples/jsm/controls/OrbitControls.js";
 const scene = new THREE.Scene();
 
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(
+  75,
+  window.innerWidth / window.innerHeight,
+  0.1,
+  1000
+);
 
 const renderer = new THREE.WebGLRenderer({
   canvas: document.querySelector("#bg"),
@@ -16,6 +21,7 @@ camera.position.setZ(30);
 camera.position.setX(-3);
 
 renderer.render(scene, camera);
+
 
 // Lights
 const pointLight = new THREE.PointLight(0xffffff);
@@ -46,9 +52,8 @@ function addStar() {
 Array(250).fill().forEach(addStar);
 
 // changes bg
-const spaceTexture = new THREE.TextureLoader().load("./dist/light-bg.jpg");
+const spaceTexture = new THREE.TextureLoader().load("./dist/space.jpg");
 scene.background = spaceTexture;
-
 
 //MOOON
 const moonTexture = new THREE.TextureLoader().load("./dist/moon.jpg");
@@ -62,8 +67,6 @@ scene.add(moon);
 moon.position.z = 30;
 moon.position.setX(-10);
 
-ani.position.z = -5;
-ani.position.x = 2;
 
 // scroll Animation
 
@@ -73,6 +76,7 @@ function moveCamera() {
   moon.rotation.x += 0.05;
   moon.rotation.y += 0.075;
   moon.rotation.z += 0.05;
+
 
   camera.rotation.z = t * -0.01;
   camera.rotation.x = t * -0.0002;
@@ -96,20 +100,3 @@ function animate() {
 }
 
 animate();
-
-var checkbox = document.querySelector("input[name=checkbox]");
-var element = document.body;
-
-checkbox.addEventListener('change', function() {
-  if (this.checked) {
-    console.log("Checkbox is checked..");
-    const spaceTexture = new THREE.TextureLoader().load('./dark-bg.jpg');
-    scene.background = spaceTexture;
-    element.classList.toggle("dark-mode");
-  } else {
-    console.log("Checkbox is not checked..");
-    const spaceTexture = new THREE.TextureLoader().load('./light-bg.jpg');
-    scene.background = spaceTexture;
-    element.classList.toggle("dark-mode");
-  }
-});
